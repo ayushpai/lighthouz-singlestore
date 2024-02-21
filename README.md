@@ -16,9 +16,9 @@ This demo allows you to run a RAG Chatbot in a Streamlit interface and evaluate 
 2. Set up environment variables for Google Gemini and OpenAI API key. (`export OPENAI_API_KEY='your-api-key-here'`).
 3. Add your SingleStoreDB database URL to line 26 to establish the database connection.
 4. Replace the PDF document on line 15 with any document of your choice for RAG (or keep this one to test it out!)
-5. Add your LightHouz API Key on line 31 of `main.py`: `LH = Lighthouz("LH-XRjjxBxtYjXPQqwpPJ0WyHcc0tjBx6vy")`.
-6. Generate a new benchmark for your RAG app on the LightHouz AutoBench Dashboard. Enter the `benchmark_id` on line 32.
-7. Create new apps in the LightHouz Dashboard for `gpt-4` and `gemini-pro`. Enter the `app_id`s onto lines 33-34.
+5. Add your LightHouz API Key on line 30 of `main.py`: `LH = Lighthouz("LH-XRjjxBxtYjXPQqwpPJ0WyHcc0tjBx6vy")`.
+6. Generate a new benchmark for your RAG app on the LightHouz AutoBench Dashboard. Enter the `benchmark_id` on line 31.
+7. Create new apps in the LightHouz Dashboard for `gpt-4` and `gemini-pro`. Enter the `app_id`s onto lines 32-33.
 8. That's it! You're ready to use your chatbot and evaluations!
 
 ## Execution
