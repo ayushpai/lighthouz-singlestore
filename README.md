@@ -26,5 +26,5 @@ This demo allows you to run a RAG Chatbot in a Streamlit interface and evaluate 
 
 ## Resources
 - Slides From this Demo: https://docs.google.com/presentation/d/1JG57ZVd0_zKhzM6SkKtes72SrMsKh_wCd_O6vCfuDtw/edit?usp=sharing
-- LightHouz Documentation: https://lighthouz.ai/docs/
-
+- Lighthouz Documentation: https://lighthouz.ai/docs/
+- Lighthouz SDK: https://github.com/Lighthouz-AI/lighthouz_sdk
