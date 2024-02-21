@@ -1,6 +1,8 @@
 # RAG Chatbot + Evaluation w/ Lighthouz & SingleStore
 
-Retrieval Augmented Generation (RAG) is one of the most popular ways to increase the accuracy of Large Language Models (LLMs) and reduce hallucinations. However, even with RAG-based systems, LLMs are prone to many issues. Understanding these issues with standardized benchmarks is important in order to improve a model or the documents in RAG. LightHouz AI allows you to evaluate your LLM across 6 benchmark categories: Hallucination Tests, Out of Context, Prompt Injection, PII Leak, Toxicity, and Bias. Lighthouz AutoBench automatically generates benchmarks to evaluate your RAG Application based on the documents you upload. It also facilitates AutoEvals of those benchmarks comparing the expected result of a query to the actual response. You can also compare multiple LLMs on the same benchmark to see which performs better.
+Retrieval Augmented Generation (RAG) is one of the most popular ways to increase the accuracy of Large Language Models (LLMs) and reduce hallucinations. However, even with RAG-based systems, LLMs are prone to many issues. Understanding these issues with standardized benchmarks is important in order to improve a model or the documents in RAG. 
+
+Lighthouz AI allows you to evaluate your LLM app across 6 benchmark categories: Hallucination Tests, Out of Context, Prompt Injection, PII Leak, Toxicity, and Bias. Lighthouz AutoBench automatically generates benchmarks to evaluate your RAG Application based on the documents you upload. It also facilitates AutoEvals of those benchmarks comparing the expected result of a query to the actual response. You can also compare multiple LLMs on the same benchmark to see which performs better.
 
 This demo allows you to run a RAG Chatbot in a Streamlit interface and evaluate the chatbot using LightHouz AI.
 
@@ -9,10 +11,10 @@ This demo allows you to run a RAG Chatbot in a Streamlit interface and evaluate 
 - OpenAI Embeddings - Generates vectorized forms of the documents.
 - SingleStoreDB - Stores the prepared embeddings in a vector database.
 - LLM of Your Choice (GPT-4, Gemini Pro) - Takes in user prompt + context from retrieval and generates output.
-- LighthouzAI - Evaluates RAG chatbot responses.
+- [Lighthouz AI](https://lighthouz.ai/) - Evaluates RAG chatbot responses.
 
 ## Setup
-1. Install the `requrements.txt`
+1. Install the `requirements.txt`
 2. Set up environment variables for Google Gemini and OpenAI API key. (`export OPENAI_API_KEY='your-api-key-here'`).
 3. Add your SingleStoreDB database URL to line 26 to establish the database connection.
 4. Replace the PDF document on line 15 with any document of your choice for RAG (or keep this one to test it out!)
@@ -26,5 +28,5 @@ This demo allows you to run a RAG Chatbot in a Streamlit interface and evaluate 
 
 ## Resources
 - Slides From this Demo: https://docs.google.com/presentation/d/1JG57ZVd0_zKhzM6SkKtes72SrMsKh_wCd_O6vCfuDtw/edit?usp=sharing
-- LightHouz Documentation: https://lighthouz.ai/docs/
-
+- Lighthouz AI Documentation: https://lighthouz.ai/docs/
+- Lighthouz SDK: https://github.com/Lighthouz-AI/lighthouz_sdk
