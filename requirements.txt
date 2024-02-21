@@ -1,0 +1,10 @@
+langchain==0.1.8
+langchain_community==0.0.21
+langchain_openai==0.0.6
+pypdf==4.0.2
+streamlit==1.31.1
+lighthouz~=0.0.5
+singlestoredb==1.0.1
+google-generativeai==0.3.2
+tiktoken==0.6.0
+openai==1.12.0
