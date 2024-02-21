@@ -1,13 +1,14 @@
 import os
 import streamlit as st
+
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.vectorstores import SingleStoreDB
 from langchain_openai import OpenAIEmbeddings
-import google.generativeai as gemini
+from langchain_openai import OpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
+
 from lighthouz import Lighthouz
-from lighthouz.benchmark import Benchmark
-from lighthouz.app import App
 from lighthouz.evaluation import Evaluation
 
 # Load the PDF document
@@ -18,27 +19,22 @@ data = loader.load()
 text_splitter = RecursiveCharacterTextSplitter(chunk_size=2000, chunk_overlap=0)
 texts = text_splitter.split_documents(data)
 
-# Initialize embeddings
+# Generate embeddings
 embeddings = OpenAIEmbeddings()
 
-
-os.environ["OPENAI_API_KEY"] = "INSERT_KEY"  # Enter your OpenAI key to be used in the RAG model.
-os.environ["GEMINI_API_KEY"] = "INSERT_KEY"
-gemini.configure(api_key=os.environ["GEMINI_API_KEY"])
-os.environ["SINGLESTOREDB_URL"] = "SINGLESTOREDB_DATABASE_URL"  # Set up the SingleStoreDB connection
+# Set up the SingleStoreDB connection and vector database
+os.environ["SINGLESTOREDB_URL"] = "SINGLESTOREDB_URL"  # insert SingleStoreDB Database URL
 SingleStoreVectorDB = SingleStoreDB.from_documents(texts, embeddings, table_name="notebook")
 
-# Initialize the Gemini model
-model = gemini.GenerativeModel('gemini-pro')
-
 # Initialize Lighthouz
-LH = Lighthouz("LIGHTHOUZ-API-KEY")
-benchmark_id = "65d54f4a1f281c52d90d51c3"  # add your own benchmark
-app_id = '65d552dc9b50b4563f339eec'  # add your own app
+LH = Lighthouz("LIGHTHOUZ_API_KEY")  # insert LightHouz API key
+benchmark_id = 'insert_benchmark_id'
+gemini_app_id = 'insert_gemini_app_id'  # gemini app
+gpt4_app_id = 'insert_gpt4_app_id'  # gpt4 app
 
 
 # Modularized RAG Model function
-def rag_model(query):
+def rag_model(query, model):
     # Find documents that correspond to the query
     docs = SingleStoreVectorDB.similarity_search(query)
     if docs:
@@ -46,7 +42,7 @@ def rag_model(query):
     else:
         context = "No relevant information found."
 
-    # Prepare the prompt for the Gemini model
+    # Prepare the prompt for the LLM
     prompt_template = f"""
         You are a helpful Assistant who answers users' questions based on contexts given to you.
 
@@ -63,29 +59,63 @@ def rag_model(query):
         {context}
     """
 
-    # Generate a response
-    response = model.generate_content(prompt_template)
+    # Generate a response based on the model
+    if model == 'gemini-pro':
+        llm = ChatGoogleGenerativeAI(model="gemini-pro")
+        return llm.invoke(prompt_template).content
+    elif model == 'gpt-4':
+        llm = OpenAI()
+        return llm.invoke(prompt_template)
 
-    return response.text
+
+def gemini_response_function(query: str) -> str:
+    return rag_model(query, 'gemini-pro')
+
+
+def gpt4_response_function(query: str) -> str:
+    return rag_model(query, 'gpt-4')
 
 
 # Streamlit app
 def chatbot():
     st.title("RAG Chatbot")
+
+    model = st.radio(
+        "Choose a model to generate responses:",
+        ('gemini-pro', 'gpt-4')
+    )
+
     user_input = st.text_input("Ask me anything about the Superbowl:")
 
     if user_input:
-        response = rag_model(user_input)
+        response = rag_model(user_input, model)
         st.write(response)
 
     # Button for evaluating the RAG Chat Bot
-    if st.button('Evaluate RAG Chat Bot'):
+    if st.button('Evaluate ' + model + ' RAG Chat Bot'):
         # Initialize evaluation
         evaluation = Evaluation(LH)
+
+        response_function = None
+        app_id = None
+        if model == 'gemini-pro':
+            response_function = gemini_response_function
+            app_id = gemini_app_id
+        elif model == 'gpt-4':
+            response_function = gpt4_response_function
+            app_id = gpt4_app_id
+
         results = evaluation.evaluate_rag_model(
-            response_function=rag_model,
+            response_function=response_function,
             benchmark_id=benchmark_id,
             app_id=app_id,
+        )
+    elif st.button('Compare GPT-4 and Gemini Evaluations'):
+        evaluation = Evaluation(LH)
+        results = evaluation.evaluate_multiple_rag_models(
+            response_functions=[gemini_response_function, gpt4_response_function],
+            benchmark_id=benchmark_id,
+            app_ids=[gemini_app_id, gpt4_app_id],
         )
 
 
