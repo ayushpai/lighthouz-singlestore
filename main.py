@@ -23,8 +23,11 @@ texts = text_splitter.split_documents(data)
 embeddings = OpenAIEmbeddings()
 
 # Set up the SingleStoreDB connection and vector database
+# Format: username:password@host:port/database_name
 os.environ["SINGLESTOREDB_URL"] = "SINGLESTOREDB_URL"  # insert SingleStoreDB Database URL
-SingleStoreVectorDB = SingleStoreDB.from_documents(texts, embeddings, table_name="notebook")
+SingleStoreVectorDB = SingleStoreDB.from_documents(
+    texts, embeddings, table_name="notebook", singlestoredb_url=os.environ["SINGLESTOREDB_URL"]
+)
 
 # Initialize Lighthouz
 LH = Lighthouz("LIGHTHOUZ_API_KEY")  # insert LightHouz API key
